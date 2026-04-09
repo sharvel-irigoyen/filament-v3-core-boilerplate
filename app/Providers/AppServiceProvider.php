@@ -21,6 +21,11 @@ use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Facades\Vite;
+use Livewire\Livewire;
+use Jeffgreco13\FilamentBreezy\Livewire\PersonalInfo;
+use Jeffgreco13\FilamentBreezy\Livewire\UpdatePassword;
+use Jeffgreco13\FilamentBreezy\Livewire\TwoFactorAuthentication;
+use Jeffgreco13\FilamentBreezy\Livewire\BrowserSessions;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -38,6 +43,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Registrar componentes de Filament Breezy globalmente.
+        // Livewire los necesita en TODAS las peticiones (incluyendo /livewire/update),
+        // pero BreezyCore::boot() solo corre cuando Filament inicializa el panel.
+        // Registrarlos aquí garantiza que siempre estén disponibles.
+        Livewire::component('personal_info', PersonalInfo::class);
+        Livewire::component('update_password', UpdatePassword::class);
+        Livewire::component('two_factor_authentication', TwoFactorAuthentication::class);
+        Livewire::component('browser_sessions', BrowserSessions::class);
+
         Vite::useCspNonce();
 
         if(config('app.redirect_https')){
