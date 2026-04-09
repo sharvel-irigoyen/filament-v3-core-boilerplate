@@ -29,7 +29,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Workdir
-WORKDIR /var/www/on-equifax
+WORKDIR /var/www/filament-v3
 
 # ====================================================================================
 # [BEST PRACTICE] USER MAPPING
@@ -48,7 +48,7 @@ RUN if [ "$user" != "www-data" ]; then \
     fi
 
 # Ajustar permisos del directorio de trabajo
-RUN chown -R $user:$user /var/www/on-equifax
+RUN chown -R $user:$user /var/www/filament-v3
 
 # Cambiar al usuario no-root
 USER $user

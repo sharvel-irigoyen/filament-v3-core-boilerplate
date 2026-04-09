@@ -2,7 +2,7 @@ services:
   # =========================================
   # BACKEND (PHP-FPM) - Aislado (Solo red interna)
   # =========================================
-  on-equifax-php:
+  filament-v3-php:
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,14 +11,14 @@ services:
         user: ${DOCKER_USER:-www-data}
         uid: ${DOCKER_UID:-33}
         gid: ${DOCKER_GID:-33}
-    image: on-equifax-php:dev
-    container_name: on-equifax-php
+    image: filament-v3-php:dev
+    container_name: filament-v3-php
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      - DB_HOST=on-equifax-db
-      - REDIS_HOST=on-equifax-redis
+      - DB_HOST=filament-v3-db
+      - REDIS_HOST=filament-v3-redis
     command: >
       sh -c "
         if [ ! -f vendor/autoload.php ]; then
@@ -32,14 +32,14 @@ services:
         php-fpm
       "
     volumes:
-      - ./:/var/www/on-equifax
+      - ./:/var/www/filament-v3
       - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
     expose:
       - "9000"
     depends_on:
-      on-equifax-db:
+      filament-v3-db:
         condition: service_healthy
-      on-equifax-redis:
+      filament-v3-redis:
         condition: service_started
     healthcheck:
       # Verifica que PHP-FPM esté activo Y que artisan (app + DB) funcionen correctamente
@@ -49,9 +49,9 @@ services:
       retries: 5
       start_period: 60s
     networks:
-      - on-equifax_net
+      - filament-v3_net
 
-  on-equifax-worker:
+  filament-v3-worker:
     build:
       context: .
       dockerfile: Dockerfile
@@ -60,27 +60,27 @@ services:
         user: ${DOCKER_USER:-www-data}
         uid: ${DOCKER_UID:-33}
         gid: ${DOCKER_GID:-33}
-    image: on-equifax-php:dev
-    container_name: on-equifax-worker
+    image: filament-v3-php:dev
+    container_name: filament-v3-worker
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      - DB_HOST=on-equifax-db
-      - REDIS_HOST=on-equifax-redis
+      - DB_HOST=filament-v3-db
+      - REDIS_HOST=filament-v3-redis
     # --sleep=3: espera 3s entre polls cuando no hay jobs (ahorra CPU)
     # --max-time=3600: reinicia el worker cada hora para liberar memoria
     command: php artisan queue:work --tries=3 --timeout=120 --sleep=3 --max-time=3600
     volumes:
-      - ./:/var/www/on-equifax
+      - ./:/var/www/filament-v3
       - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
     depends_on:
-      on-equifax-db:
+      filament-v3-db:
         condition: service_healthy
-      on-equifax-redis:
+      filament-v3-redis:
         condition: service_started
       # Espera a que PHP-FPM esté healthy (garantiza que las migraciones ya corrieron)
-      on-equifax-php:
+      filament-v3-php:
         condition: service_healthy
     healthcheck:
       # Verifica que el proceso PID 1 (queue:work) siga vivo
@@ -90,25 +90,25 @@ services:
       retries: 3
       start_period: 30s
     networks:
-      - on-equifax_net
+      - filament-v3_net
 
   # =========================================
   # SIDECAR NGINX (El Portero Local)
   # =========================================
-  on-equifax-nginx:
+  filament-v3-nginx:
     image: nginx:alpine
-    container_name: on-equifax-nginx
+    container_name: filament-v3-nginx
     restart: unless-stopped
     expose:
       - "80"
     ports:
       - "${APP_PORT:-80}:80"
     volumes:
-      - ./:/var/www/on-equifax
+      - ./:/var/www/filament-v3
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       # Espera a que PHP-FPM esté realmente healthy antes de aceptar tráfico
-      on-equifax-php:
+      filament-v3-php:
         condition: service_healthy
     healthcheck:
       # wget --spider verifica que Nginx responde sin descargar el body
@@ -118,15 +118,15 @@ services:
       retries: 3
       start_period: 15s
     networks:
-      - on-equifax_net
+      - filament-v3_net
       - proxy_net
 
   # =========================================
   # DATA & CACHE
   # =========================================
-  on-equifax-db:
+  filament-v3-db:
     image: mysql:8.0
-    container_name: on-equifax-db
+    container_name: filament-v3-db
     restart: unless-stopped
     command:
       - "--character-set-server=utf8mb4"
@@ -146,11 +146,11 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - on-equifax_net
+      - filament-v3_net
 
-  on-equifax-redis:
+  filament-v3-redis:
     image: redis:7-alpine
-    container_name: on-equifax-redis
+    container_name: filament-v3-redis
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
     volumes:
@@ -161,14 +161,14 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - on-equifax_net
+      - filament-v3_net
 
 volumes:
   on_equifax_db_data:
   on_equifax_redis_data:
 
 networks:
-  on-equifax_net:
+  filament-v3_net:
     driver: bridge
   proxy_net:
     external: true

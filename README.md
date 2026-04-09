@@ -1,4 +1,4 @@
-# On-Equifax — Panel de Administración
+# filament-v3 — Panel de Administración
 
 > Plataforma de administración empresarial construida sobre **Laravel 12** + **Filament 3**, con autenticación robusta, gestión de roles y permisos, auditoría completa, importación/exportación masiva de usuarios e infraestructura lista para producción con Docker.
 
@@ -28,7 +28,7 @@
 
 ## 📌 Descripción General
 
-**On-Equifax** es un panel de administración de usuarios y recursos que provee:
+**filament-v3** es un panel de administración de usuarios y recursos que provee:
 
 - Autenticación segura con soporte para **2FA (Two-Factor Authentication)** y gestión de sesiones por navegador.
 - Sistema de **roles y permisos granulares** basado en Spatie Permission + Filament Shield.
@@ -76,11 +76,11 @@
 ### Infraestructura (Docker)
 | Servicio | Imagen | Rol |
 |---|---|---|
-| `on-equifax-php` | PHP 8.4-FPM (custom) | Servidor PHP-FPM |
-| `on-equifax-worker` | PHP 8.4-FPM (custom) | Procesador de colas |
-| `on-equifax-nginx` | nginx:alpine | Reverse proxy / web server |
-| `on-equifax-db` | mysql:8.0 | Base de datos principal |
-| `on-equifax-redis` | redis:7-alpine | Cache + Queue broker |
+| `filament-v3-php` | PHP 8.4-FPM (custom) | Servidor PHP-FPM |
+| `filament-v3-worker` | PHP 8.4-FPM (custom) | Procesador de colas |
+| `filament-v3-nginx` | nginx:alpine | Reverse proxy / web server |
+| `filament-v3-db` | mysql:8.0 | Base de datos principal |
+| `filament-v3-redis` | redis:7-alpine | Cache + Queue broker |
 
 ---
 
@@ -197,21 +197,21 @@
                           └──────────┬──────────┘
                                      │ HTTPS/80
                           ┌──────────▼──────────┐
-                          │   on-equifax-nginx   │
+                          │   filament-v3-nginx   │
                           │   (nginx:alpine)     │
                           └──────────┬──────────┘
                                      │ FastCGI :9000
                     ┌────────────────▼────────────────┐
-                    │       on-equifax_net             │
+                    │       filament-v3_net             │
                     │                                  │
           ┌─────────▼────────┐           ┌────────────▼────────┐
-          │  on-equifax-php  │           │  on-equifax-worker  │
+          │  filament-v3-php  │           │  filament-v3-worker  │
           │  (PHP 8.4-FPM)   │           │  (Queue Worker)     │
           │  php-fpm :9000   │           │  --tries=3 --t=120  │
           └──────┬───────────┘           └────────────┬────────┘
                  │                                    │
          ┌───────▼──────────────────────────────────▼──────┐
-         │               on-equifax_net                     │
+         │               filament-v3_net                     │
          │                                                  │
   ┌──────▼──────┐                              ┌───────────▼──────┐
   │  MySQL 8.0  │                              │  Redis 7-alpine  │
@@ -247,8 +247,8 @@
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/Electo-Desarrollo/on-equifax.git
-cd on-equifax
+git clone https://github.com/Electo-Desarrollo/filament-v3.git
+cd filament-v3
 
 # 2. Setup automático (instala deps, genera clave, migra, build assets)
 composer setup
@@ -284,20 +284,20 @@ docker network create proxy_net
 docker compose up -d --build
 
 # 5. Esperar que PHP-FPM esté listo y ejecutar migraciones
-docker exec on-equifax-php php artisan migrate --force
+docker exec filament-v3-php php artisan migrate --force
 
 # 6. Crear el primer super_admin
-docker exec -it on-equifax-php php artisan make:filament-user
+docker exec -it filament-v3-php php artisan make:filament-user
 ```
 
 ### Actualización / Deploy
 
 ```bash
 git pull
-docker compose build on-equifax-php
+docker compose build filament-v3-php
 docker compose up -d --remove-orphans
-docker exec on-equifax-php php artisan migrate --force
-docker exec on-equifax-php php artisan optimize
+docker exec filament-v3-php php artisan migrate --force
+docker exec filament-v3-php php artisan optimize
 ```
 
 ### Permisos de Directorios
@@ -314,7 +314,7 @@ sudo chmod -R 775 storage bootstrap/cache
 
 | Variable | Descripción | Ejemplo |
 |---|---|---|
-| `APP_NAME` | Nombre de la aplicación | `On-Equifax` |
+| `APP_NAME` | Nombre de la aplicación | `filament-v3` |
 | `APP_ENV` | Entorno de ejecución | `production` |
 | `APP_KEY` | Clave de cifrado Laravel | (generada con `artisan key:generate`) |
 | `APP_DEBUG` | Modo debug (desactivar en prod) | `false` |
@@ -322,12 +322,12 @@ sudo chmod -R 775 storage bootstrap/cache
 | `APP_PORT` | Puerto Docker de Nginx | `80` |
 | `redirect_https` | Forzar HTTPS | `true` |
 | `DB_CONNECTION` | Driver de BD | `mysql` |
-| `DB_HOST` | Host de MySQL (Docker: `on-equifax-db`) | `on-equifax-db` |
+| `DB_HOST` | Host de MySQL (Docker: `filament-v3-db`) | `filament-v3-db` |
 | `DB_DATABASE` | Nombre de la base de datos | `on_equifax` |
 | `DB_USERNAME` | Usuario MySQL | `equifax_user` |
 | `DB_PASSWORD` | Contraseña MySQL | `secret` |
 | `DB_ROOT_PASSWORD` | Contraseña root MySQL (Docker) | `rootsecret` |
-| `REDIS_HOST` | Host Redis (Docker: `on-equifax-redis`) | `on-equifax-redis` |
+| `REDIS_HOST` | Host Redis (Docker: `filament-v3-redis`) | `filament-v3-redis` |
 | `REDIS_PASSWORD` | Contraseña Redis | `redissecret` |
 | `QUEUE_CONNECTION` | Driver de colas | `redis` |
 | `CACHE_STORE` | Driver de caché | `redis` |
@@ -345,7 +345,7 @@ sudo chmod -R 775 storage bootstrap/cache
 ## 📁 Estructura del Proyecto
 
 ```
-on-equifax/
+filament-v3/
 ├── app/
 │   ├── Activitylog/
 │   │   └── Pipes/
@@ -564,7 +564,7 @@ El script:
 
 > ⚠️ **Importante:** El rollback **NO revierte migraciones de base de datos** automáticamente. Si el deploy ejecutó migraciones, deben revertirse manualmente:
 > ```bash
-> docker exec -it on-equifax-php php artisan migrate:rollback
+> docker exec -it filament-v3-php php artisan migrate:rollback
 > ```
 
 ---
@@ -591,13 +591,13 @@ php artisan queue:work --tries=3 --timeout=120
 php artisan pail
 
 # Acceder al contenedor PHP
-docker exec -it on-equifax-php bash
+docker exec -it filament-v3-php bash
 
 # Ver logs del worker
-docker logs on-equifax-worker -f
+docker logs filament-v3-worker -f
 
 # Ver logs de Nginx
-docker logs on-equifax-nginx -f
+docker logs filament-v3-nginx -f
 ```
 
 ---
