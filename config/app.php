@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -78,11 +78,11 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'es'),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
+    'faker_locale' => env('APP_FAKER_LOCALE', 'es_PE'),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,4 +123,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect to HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | This option determines whether the application should redirect all HTTP
+    | requests to HTTPS. This is useful for ensuring secure connections.
+    | Set this to true in production environments where HTTPS is required.
+    | */
+
+    'redirect_https' => env('REDIRECT_HTTPS', false),
 ];

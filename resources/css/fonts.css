@@ -1,0 +1,57 @@
+@layer base {
+
+    /* MADETommy */
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftLight.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftLight.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftLight.woff') format('woff');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftRegular.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftRegular.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftRegular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftMedium.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftMedium.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftMedium.woff') format('woff');
+        font-weight: 500;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftBold.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftBold.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftBold.woff') format('woff');
+        font-weight: 600;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftExtraBold.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftExtraBold.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftExtraBold.woff') format('woff');
+        font-weight: 800;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'MADETommySoft';
+        src: url('../fonts/MADETommy/MADETommySoftBlack.ttf') format('ttf'),
+            url('../fonts/MADETommy/MADETommySoftBlack.woff2') format('woff2'),
+            url('../fonts/MADETommy/MADETommySoftBlack.woff') format('woff');
+        font-weight: 900;
+        font-style: normal;
+    }
+}
