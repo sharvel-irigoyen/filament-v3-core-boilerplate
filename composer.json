@@ -22,7 +22,7 @@
         "pxlrbt/filament-excel": "^2.4",
         "rmsramos/activitylog": "^1.0",
         "shuvroroy/filament-spatie-laravel-health": "^2.3",
-        "spatie/laravel-csp": "*",
+        "spatie/laravel-csp": "^2",
         "spatie/laravel-permission": "^6.24",
         "tomatophp/filament-users": "^2.0"
     },
