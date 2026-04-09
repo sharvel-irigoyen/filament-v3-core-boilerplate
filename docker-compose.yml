@@ -28,6 +28,7 @@ services:
           php artisan key:generate --force;
         fi &&
         php artisan storage:link || true &&
+        php artisan migrate --force &&
         php-fpm
       "
     volumes:
@@ -41,10 +42,12 @@ services:
       on-equifax-redis:
         condition: service_started
     healthcheck:
-      test: ["CMD-SHELL", "php -v >/dev/null 2>&1 || exit 1"]
+      # Verifica que PHP-FPM esté activo Y que artisan (app + DB) funcionen correctamente
+      test: ["CMD-SHELL", "php artisan about --no-interaction > /dev/null 2>&1 || exit 1"]
       interval: 30s
-      timeout: 5s
+      timeout: 15s
       retries: 5
+      start_period: 60s
     networks:
       - on-equifax_net
 
@@ -65,7 +68,9 @@ services:
     environment:
       - DB_HOST=on-equifax-db
       - REDIS_HOST=on-equifax-redis
-    command: php artisan queue:work --tries=3 --timeout=120
+    # --sleep=3: espera 3s entre polls cuando no hay jobs (ahorra CPU)
+    # --max-time=3600: reinicia el worker cada hora para liberar memoria
+    command: php artisan queue:work --tries=3 --timeout=120 --sleep=3 --max-time=3600
     volumes:
       - ./:/var/www/on-equifax
       - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -74,6 +79,16 @@ services:
         condition: service_healthy
       on-equifax-redis:
         condition: service_started
+      # Espera a que PHP-FPM esté healthy (garantiza que las migraciones ya corrieron)
+      on-equifax-php:
+        condition: service_healthy
+    healthcheck:
+      # Verifica que el proceso PID 1 (queue:work) siga vivo
+      test: ["CMD-SHELL", "kill -0 1 2>/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     networks:
       - on-equifax_net
 
@@ -92,7 +107,16 @@ services:
       - ./:/var/www/on-equifax
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - on-equifax-php
+      # Espera a que PHP-FPM esté realmente healthy antes de aceptar tráfico
+      on-equifax-php:
+        condition: service_healthy
+    healthcheck:
+      # wget --spider verifica que Nginx responde sin descargar el body
+      test: ["CMD-SHELL", "wget -q --spider --timeout=5 http://127.0.0.1/ 2>/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     networks:
       - on-equifax_net
       - proxy_net
