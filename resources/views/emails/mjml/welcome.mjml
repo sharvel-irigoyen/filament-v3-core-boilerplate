@@ -1,0 +1,101 @@
+<mjml>
+  <mj-head>
+    <mj-title>Bienvenido a {{ $appName }}</mj-title>
+    <mj-preview>Tus credenciales de acceso a la plataforma han sido generadas.</mj-preview>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif" />
+      <mj-text font-size="16px" line-height="1.6" color="#334155" />
+      <mj-section padding="0px" />
+    </mj-attributes>
+    <mj-style>
+      .body-bg { background-color: #F4F7FA; }
+      .content-wrapper { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border-radius: 8px; border-top: 4px solid #E30A24; overflow: hidden; }
+      .brand-red { color: #E30A24; }
+      .vault-box { border: 1px solid #E2E8F0; border-left: 4px solid #E30A24; background-color: #F8FAFC; border-radius: 0 8px 8px 0; padding: 20px; }
+      .mono-badge { font-family: 'Courier New', Courier, monospace; font-size: 20px; font-weight: 700; letter-spacing: 2px; color: #0F172A; background-color: #E2E8F0; padding: 10px 16px; border-radius: 6px; display: inline-block; }
+      .legal-text { font-size: 12px !important; color: #64748B !important; line-height: 1.5 !important; }
+      .link-discreet { color: #64748B; text-decoration: underline; }
+    </mj-style>
+  </mj-head>
+  <mj-body css-class="body-bg" width="600px">
+
+    <!-- Top Spacer -->
+    <mj-section padding="40px 0 0 0"></mj-section>
+
+    <!-- Main Card -->
+    <mj-wrapper padding="0 20px 30px 20px">
+      <mj-section css-class="content-wrapper" background-color="#FFFFFF">
+
+        <!-- Header with Logo inside Card -->
+        <mj-column width="100%" padding="30px 40px 20px 40px">
+          <mj-text font-size="22px" font-weight="800" color="#0F172A" padding="0" letter-spacing="-0.5px">
+            {{ $appName }}
+          </mj-text>
+        </mj-column>
+
+        <mj-column width="100%">
+          <mj-divider border-width="1px" border-color="#E2E8F0" padding="0 40px 30px 40px" />
+        </mj-column>
+
+        <!-- Main Content -->
+        <mj-column width="100%" padding="0 40px 10px 40px">
+          <mj-text font-size="26px" font-weight="700" color="#0F172A" padding="0 0 20px 0" line-height="1.2" letter-spacing="-0.5px">
+            Bienvenido a tu cuenta
+          </mj-text>
+
+          <mj-text padding="0 0 15px 0">
+            Estimado/a <strong style="color:#0F172A;">{{ $userName }}</strong>,
+          </mj-text>
+
+          <mj-text padding="0 0 25px 0">
+            Tu perfil ha sido configurado exitosamente por un administrador. A partir de este momento, tienes acceso total a las herramientas y reportes de la plataforma corporativa.
+          </mj-text>
+
+          <!-- Security Vault Box -->
+          <mj-text padding="0 0 30px 0">
+            <div class="vault-box">
+              <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#64748B; font-weight:600; margin-bottom:15px;">
+                Tus credenciales de acceso seguro
+              </div>
+
+              <div style="margin-bottom:6px; font-size:14px; color:#475569;">Usuario / Correo Electrónico</div>
+              <div style="font-size:16px; font-weight:600; color:#0F172A; margin-bottom:20px;">
+                {{ $userEmail }}
+              </div>
+
+              <div style="margin-bottom:8px; font-size:14px; color:#475569;">Contraseña Temporal</div>
+              <div class="mono-badge">
+                {{ $password }}
+              </div>
+            </div>
+          </mj-text>
+
+          <!-- Call to Action -->
+          <mj-button href="{{ $loginUrl }}" width="100%" background-color="#E30A24" color="#FFFFFF" font-size="16px" font-weight="600" border-radius="6px" inner-padding="16px" padding="0 0 30px 0">
+            Ingresar a la plataforma
+          </mj-button>
+
+          <!-- Security Advice -->
+          <mj-text font-size="14px" color="#475569" padding="0 0 30px 0" line-height="1.5">
+            <strong style="color:#0F172A;">Aviso de seguridad:</strong> El sistema te solicitará o se recomienda cambiar esta contraseña temporal por una definitiva inmediatamente después de tu primer inicio de sesión.
+          </mj-text>
+        </mj-column>
+
+      </mj-section>
+    </mj-wrapper>
+
+    <!-- Footer -->
+    <mj-section padding="0 20px 40px 20px">
+      <mj-column>
+        <mj-text align="center" css-class="legal-text" padding="0 0 10px 0">
+          Este mensaje es confidencial y ha sido enviado automáticamente por el sistema de seguridad de <strong>{{ $appName }}</strong>. Por favor, no respondas a esta dirección de correo.
+        </mj-text>
+        <mj-text align="center" css-class="legal-text" padding="0">
+          © {{ date('Y') }} {{ $appName }}. Todos los derechos reservados.<br/>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>

@@ -1,0 +1,27 @@
+@import "fonts.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-red: #9e1b32;
+        --color-red-dark: #7a1526;
+        --color-gray: #49525a;
+    }
+}
+
+body {
+    font-family:
+        "Inter",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+b,
+strong {
+    @apply font-bold;
+}

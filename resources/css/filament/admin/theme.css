@@ -1,0 +1,120 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* Overrides for Daterangepicker to match Filament UX/UI */
+
+.daterangepicker {
+    @apply border-gray-200 dark:border-white/10 dark:bg-gray-900 rounded-xl shadow-2xl font-sans text-sm !important;
+}
+
+.daterangepicker::before, .daterangepicker::after {
+    display: none !important; /* Ocultar las flechas triangulares para un look más limpio */
+}
+
+.daterangepicker .calendar-table {
+    @apply dark:bg-gray-900 border-none !important;
+}
+
+.daterangepicker .calendar-table table {
+    @apply border-collapse w-full m-0 !important;
+    border-spacing: 0 !important;
+}
+
+.daterangepicker th, .daterangepicker td {
+    @apply border-none dark:text-gray-300 m-0 p-0 !important;
+    height: 36px;
+    width: 36px;
+    min-width: 36px;
+}
+
+/* Días fuera de rango (mes anterior/siguiente) */
+.daterangepicker td.off, 
+.daterangepicker td.off.in-range, 
+.daterangepicker td.off.start-date, 
+.daterangepicker td.off.end-date {
+    @apply bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-600 !important;
+}
+
+/* Hover de días disponibles no seleccionados */
+.daterangepicker td.available:hover, 
+.daterangepicker th.available:hover {
+    @apply bg-gray-100 dark:bg-white/10 !important;
+    border-radius: 9999px !important; 
+}
+
+/* Días dentro del rango seleccionado (barra continua) */
+.daterangepicker td.in-range {
+    @apply bg-primary-50 dark:bg-white/10 text-primary-700 dark:text-gray-200 !important;
+    border-radius: 0 !important; /* Bordes planos para conectarse */
+}
+
+/* El día que está siendo 'hovered' durante la selección previa debe redondearse para cerrar la píldora */
+.daterangepicker td.in-range:hover {
+    border-radius: 9999px !important;
+}
+
+/* Día de inicio, fin o activo */
+.daterangepicker td.active, 
+.daterangepicker td.active:hover {
+    @apply bg-primary-500 dark:bg-primary-500 text-white dark:text-white font-bold shadow-sm !important;
+}
+
+/* Redondear perfectamente los extremos para el look 'píldora' */
+.daterangepicker td.start-date {
+    border-top-left-radius: 9999px !important;
+    border-bottom-left-radius: 9999px !important;
+}
+.daterangepicker td.end-date {
+    border-top-right-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+}
+.daterangepicker td.start-date.end-date {
+    border-radius: 9999px !important;
+}
+
+/* Selectores de Mes y Año */
+.daterangepicker select.monthselect, 
+.daterangepicker select.yearselect {
+    @apply bg-transparent dark:text-gray-200 border-gray-300 dark:border-white/10 rounded-md py-1 px-2 text-xs focus:ring-primary-500 focus:border-primary-500 !important;
+}
+
+/* Barra lateral (Rangos: Últimos 7 días, Este mes, etc) */
+.daterangepicker .ranges ul {
+    @apply p-2;
+}
+
+.daterangepicker .ranges li {
+    @apply text-gray-700 dark:text-gray-300 rounded-lg mb-1 transition-colors !important;
+}
+
+.daterangepicker .ranges li:hover {
+    @apply bg-gray-100 dark:bg-white/5 !important;
+}
+
+.daterangepicker .ranges li.active {
+    @apply bg-primary-600 text-white !important;
+}
+
+/* Zona inferior de botones (Cancelar / Aplicar) */
+.daterangepicker .drp-buttons {
+    @apply border-t border-gray-200 dark:border-white/10 py-3 px-4 !important;
+}
+
+.daterangepicker .drp-buttons .btn {
+    @apply font-medium text-sm rounded-lg px-4 py-2 transition-colors !important;
+}
+
+.daterangepicker .drp-buttons .cancelBtn {
+    @apply text-gray-700 dark:text-gray-300 bg-transparent hover:bg-gray-100 dark:hover:bg-white/5 !important;
+}
+
+.daterangepicker .drp-buttons .applyBtn {
+    @apply bg-primary-600 hover:bg-primary-500 text-white shadow-sm !important;
+}
+
+/* Borde divisor entre la barra lateral y los calendarios */
+.daterangepicker.show-ranges.ltr .drp-calendar.left,
+.daterangepicker.show-ranges.rtl .drp-calendar.right {
+    @apply border-l border-gray-200 dark:border-white/10 !important;
+}
