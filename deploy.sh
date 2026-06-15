@@ -3,6 +3,12 @@ set -e
 
 echo "🚀 Iniciando despliegue para Boilerplate..."
 
+# 0. Devolver permisos si el contenedor está corriendo (previene errores de Git Permission denied)
+if docker compose -f docker-compose.yml ps app 2>/dev/null | grep -q "Up"; then
+    echo "🔓 Liberando permisos de almacenamiento temporalmente para Git..."
+    docker compose -f docker-compose.yml exec -T --user root app chown -R $(id -u):$(id -g) storage bootstrap/cache 2>/dev/null || true
+fi
+
 # 1. Actualizar código fuente
 echo "⬇️  Bajando últimos cambios de Git..."
 git fetch origin
@@ -69,6 +75,7 @@ sleep 5
 # Usamos --user root porque los archivos del volumen montado pertenecen a root en el host.
 # Sin esto, www-data no puede escribir en vendor/ ni node_modules/.
 echo "📦 Instalando dependencias PHP de Composer..."
+docker compose -f docker-compose.yml exec -T --user root app git config --global --add safe.directory /var/www/app
 docker compose -f docker-compose.yml exec -T --user root app composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # 5.5 Construir assets (Vite / Filament)
@@ -95,7 +102,7 @@ docker compose -f docker-compose.yml exec -T --user root app chmod -R 775 storag
 
 # 7. Esperar a que PHP-FPM esté healthy
 echo "⏳ Esperando a que el backend esté listo y healthy..."
-timeout 180 sh -c 'until docker inspect --format="{{.State.Health.Status}}" app 2>/dev/null | grep -q healthy; do sleep 3; echo "  ...esperando"; done'
+timeout 180 sh -c 'until docker compose -f docker-compose.yml ps app | grep -q "(healthy)"; do sleep 3; echo "  ...esperando"; done'
 
 # 8. Recargar Nginx (zero-downtime — las conexiones activas no se cortan)
 echo "🔄 Recargando Nginx..."
