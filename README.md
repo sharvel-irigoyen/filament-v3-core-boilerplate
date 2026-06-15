@@ -1,100 +1,100 @@
 # Filament Core Boilerplate
 
-> Plataforma base (boilerplate) construida sobre **Laravel 12** + **Filament 3**, con autenticación robusta, gestión de roles y permisos, auditoría completa, y perfiles de usuario. Lista para ser clonada y utilizada como base para futuros proyectos.
+> A starter boilerplate built on **Laravel 12** + **Filament 3**, featuring robust authentication, role and permission management, comprehensive auditing, and user profiles. Ready to be cloned and used as the foundation for future projects.
 
 ---
 
-## 📋 Tabla de Contenidos
+## 📋 Table of Contents
 
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Funcionalidades Incluidas](#-funcionalidades-incluidas)
-- [Instalación Rápida (Local)](#-instalación-rápida-local)
-- [Despliegue con Docker](#-despliegue-con-docker)
+- [Tech Stack](#-tech-stack)
+- [Included Features](#-included-features)
+- [Quick Start (Local)](#-quick-start-local)
+- [Deployment with Docker](#-deployment-with-docker)
 
 ---
 
-## 🛠 Stack Tecnológico
+## 🛠 Tech Stack
 
 ### Backend
-| Tecnología | Rol |
+| Technology | Role |
 |---|---|
-| PHP 8.4 | Lenguaje principal |
-| Laravel ^12.0 | Framework HTTP + ORM + Queue |
-| Filament ^3.3 | Panel de administración |
-| Spatie Permission | Roles y permisos granulares |
-| Spatie Activity Log | Auditoría de modelos |
-| Spatie Media Library | Gestión de archivos/media |
+| PHP 8.4 | Primary language |
+| Laravel ^12.0 | HTTP Framework + ORM + Queue |
+| Filament ^3.3 | Administration Panel |
+| Spatie Permission | Granular roles and permissions |
+| Spatie Activity Log | Model auditing |
+| Spatie Media Library | Media/file management |
 | Spatie CSP | Content Security Policy |
-| Spatie Health | Monitoreo del sistema |
-| Filament Shield | RBAC visual en el panel |
-| Filament Breezy | Perfil, 2FA, sesiones |
-| filament-impersonate | Impersonación de usuarios |
-| filament-excel | Exportación Excel |
-| filament-log-viewer | Visor de logs en tiempo real |
+| Spatie Health | System monitoring |
+| Filament Shield | Visual RBAC in the panel |
+| Filament Breezy | Profiles, 2FA, sessions |
+| filament-impersonate | User impersonation |
+| filament-excel | Excel exports |
+| filament-log-viewer | Real-time log viewer |
 
-### Infraestructura (Docker)
-- `app`: Servidor PHP-FPM + Migraciones automáticas
-- `worker`: Procesador de colas asíncronas
-- `web`: Reverse proxy / servidor web
-- `db`: Base de datos MySQL 8
+### Infrastructure (Docker)
+- `app`: PHP-FPM Server + Automated migrations
+- `worker`: Asynchronous queue processor
+- `web`: Reverse proxy / Web server
+- `db`: MySQL 8 Database
 - `redis`: Cache + Queue broker
 
 ---
 
-## ✨ Funcionalidades Incluidas
+## ✨ Included Features
 
-- **Panel de Administración (Filament)**: Interfaz de usuario rica y reactiva.
-- **Roles y Permisos (Shield)**: Configuración automática de roles, incluyendo un `super_admin` por defecto.
-- **Autenticación (Breezy)**: Soporte de 2FA y gestión de sesiones activas.
-- **Impersonación**: Permite a los super administradores tomar el control de otras cuentas para soporte.
-- **Logs y Auditoría**: Registro de actividad en el sistema y un visor de logs en el navegador.
-- **Monitoreo (Health)**: Panel de verificación de salud del servidor y base de datos.
-- **Docker Compose**: Entorno completo de producción.
+- **Admin Panel (Filament)**: Rich and reactive user interface.
+- **Roles and Permissions (Shield)**: Automated role configuration, including a default `super_admin`.
+- **Authentication (Breezy)**: 2FA support and active session management.
+- **Impersonation**: Allows super admins to take control of other accounts for support purposes.
+- **Logs and Auditing**: Activity logging across the system and an in-browser log viewer.
+- **Monitoring (Health)**: Health check panel for the server and database.
+- **Docker Compose**: Complete production-ready environment.
 
 ---
 
-## 🚀 Instalación Rápida (Local)
+## 🚀 Quick Start (Local)
 
 ```bash
-# 1. Clonar el repositorio
-git clone <tu-repositorio>
+# 1. Clone the repository
+git clone <your-repository>
 cd boilerplate
 
-# 2. Setup automático (instala deps, genera clave, migra, build assets)
+# 2. Automated setup (installs dependencies, generates key, runs migrations, builds assets)
 composer setup
 
-# 3. Iniciar servidor de desarrollo con todos los servicios en paralelo
+# 3. Start the development server with all services running in parallel
 composer dev
 ```
 
-El comando `composer dev` levanta en paralelo:
-- `php artisan serve` — Servidor HTTP
-- `php artisan queue:listen` — Worker de colas
-- `php artisan pail` — Visor de logs en terminal
+The `composer dev` command spins up the following in parallel:
+- `php artisan serve` — HTTP Server
+- `php artisan queue:listen` — Queue worker
+- `php artisan pail` — Terminal log viewer
 - `npm run dev` — Vite HMR
 
-> **Acceso:** `http://localhost:8000/admin`
+> **Access:** `http://localhost:8000/admin`
 
 ---
 
-## 🐳 Guía de Despliegue para TI (Producción)
+## 🐳 IT Deployment Guide (Production)
 
-### Paso 1: Configurar .env
+### Step 1: Configure .env
 ```bash
 cp .env.example .env
 nano .env
 ```
-Configura los valores de base de datos, Redis, correo SMTP y URL base.
+Configure your database, Redis, SMTP email, and base URL values.
 
-### Paso 2: Ejecutar el Script de Despliegue
-Este script construirá imágenes, levantará servicios, e instalará dependencias automáticamente.
+### Step 2: Run the Deployment Script
+This script will build images, start services, and install dependencies automatically.
 ```bash
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Paso 3: Inicialización de Permisos y Administrador
-Este asistente interactivo configurará automáticamente las políticas y roles del panel, y creará la cuenta del Super Administrador raíz.
+### Step 3: Permissions and Administrator Initialization
+This interactive wizard will automatically configure panel policies and roles, and create the root Super Administrator account.
 ```bash
 ./setup-admin.sh
 ```
