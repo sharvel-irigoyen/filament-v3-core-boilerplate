@@ -34,12 +34,12 @@ npm run mjml:build # Compile MJML email templates
 ### Docker (staging/production)
 ```bash
 docker compose up -d --build
-docker exec on-equifax-php php artisan migrate --force
-docker exec on-equifax-php php artisan optimize
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan optimize
 
-# Deploy update
-git pull && docker compose build on-equifax-php && docker compose up -d --remove-orphans
-docker exec on-equifax-php php artisan migrate --force && docker exec on-equifax-php php artisan optimize
+# Full deploy manually
+git pull && docker compose build app && docker compose up -d --remove-orphans
+docker compose exec app php artisan migrate --force && docker compose exec app php artisan optimize
 
 # Rollback
 ./rollback.sh
@@ -124,11 +124,11 @@ The central feature. `app/Services/EquifaxService.php` queries Equifax's credit 
 ### Infrastructure (Docker)
 | Container | Role |
 |---|---|
-| `on-equifax-nginx` | Nginx reverse proxy → PHP-FPM |
-| `on-equifax-php` | PHP 8.4-FPM (app) |
-| `on-equifax-worker` | Queue worker |
-| `on-equifax-mysql` | MySQL 8.0 |
-| `on-equifax-redis` | Redis 7 (cache + queue) |
+| `web` | Nginx reverse proxy → PHP-FPM |
+| `app` | PHP 8.4-FPM (app) |
+| `worker` | Queue worker |
+| `db` | MySQL 8.0 |
+| `redis` | Redis 7 (cache + queue) |
 
 All containers share the `proxy_net` external Docker network (create before first deploy: `docker network create proxy_net`).
 
