@@ -57,7 +57,7 @@ echo -e "${BLUE}======================================================${NC}\n"
 # 1. GENERAR PERMISOS Y POLÍTICAS (SHIELD)
 # ==========================================
 echo -e "${YELLOW}⏳ [1/2] Generando y sincronizando permisos del sistema (Filament Shield)...${NC}"
-docker compose -f docker-compose.yml exec -T app php artisan shield:generate --all
+docker compose -f docker-compose.yml exec -T app php artisan shield:generate --all --panel=admin
 
 echo -e "${GREEN}✅ Permisos generados correctamente.${NC}\n"
 
