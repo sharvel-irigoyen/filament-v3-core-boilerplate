@@ -33,11 +33,11 @@
 | filament-log-viewer | Visor de logs en tiempo real |
 
 ### Infraestructura (Docker)
-- `boilerplate-php`: Servidor PHP-FPM + Migraciones automáticas
-- `boilerplate-worker`: Procesador de colas asíncronas
-- `boilerplate-nginx`: Reverse proxy / servidor web
-- `boilerplate-db`: Base de datos MySQL 8
-- `boilerplate-redis`: Cache + Queue broker
+- `app`: Servidor PHP-FPM + Migraciones automáticas
+- `worker`: Procesador de colas asíncronas
+- `web`: Reverse proxy / servidor web
+- `db`: Base de datos MySQL 8
+- `redis`: Cache + Queue broker
 
 ---
 
@@ -93,12 +93,8 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Paso 3: Crear el Usuario Administrador Inicial
+### Paso 3: Inicialización de Permisos y Administrador
+Este asistente interactivo configurará automáticamente las políticas y roles del panel, y creará la cuenta del Super Administrador raíz.
 ```bash
-docker exec -it --user root boilerplate-php php artisan shield:super-admin
-```
-
-### Paso 4: Generar y Asignar Permisos del Panel
-```bash
-docker exec -it --user root boilerplate-php php artisan shield:generate --all
+./setup-admin.sh
 ```
